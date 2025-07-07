@@ -1,7 +1,6 @@
 package main;
 
 import model.*;
-
 import java.util.*;
 
 public class Main {
@@ -15,7 +14,7 @@ public class Main {
         servicos.add(new Servico("banho", 100.0)); // servicos padrao
         servicos.add(new Servico("tosa", 200.0));
         Scanner leia = new Scanner(System.in);
-        int opcao;
+        int opcao = 0;
 
         do {
 
@@ -25,7 +24,13 @@ public class Main {
             System.out.println("3 - Cancelar Agendamento");
             System.out.println("4 - Sair");
             System.out.print("Opção: ");
-            opcao = leia.nextInt();
+
+            try {
+                opcao = leia.nextInt();
+            } catch (Exception erro) {
+                System.out.println("Escolha um NUMERO entre 1 e 4. ");
+                leia.nextLine(); // limpa o scanner
+            }
 
             switch (opcao) {
 
@@ -105,9 +110,10 @@ public class Main {
                     break;
 
                 default:
-                    System.out.println("Selecione uma opção válida.. ");
+                    System.out.println("Selecione uma opção válida. ");
             }
         } while (opcao != 4);
+        leia.close();
     }
 
     static Agenda verificarAgenda(int data) {
@@ -159,7 +165,7 @@ public class Main {
             System.out.println("Data:" + a.getData());
 
             for (Horario h : a.getHorarios()) {
-                if (h.getStatus().equals("O")) { //mostra os horarios que foram selecionados
+                if (h.getStatus().equals("O")) { // mostra os horarios que foram selecionados
                     System.out.println(h + "---" + h.getPxS());
                 }
             }
@@ -172,7 +178,7 @@ public class Main {
         Scanner leia = new Scanner(System.in);
         List<Horario> agendamentos = new ArrayList<>(); // para modificar o horario escolhido.
         int j = 0;
-        int numeroAgenda = 0;
+
         for (Agenda a : agendas) {
             System.out.println("Data:" + a.getData());
 
@@ -185,7 +191,7 @@ public class Main {
                     j++;
                 }
             }
-            
+
         }
 
         System.out.println("Escolha o agendamento que quer cancelar: ");
@@ -194,15 +200,25 @@ public class Main {
 
         Horario novo = agendamentos.get(cancelar);
 
-        System.out.println("Agendamento " + novo.getPxS() + "cancelado"); // antes de cancelar, usa a referencia para exibir o que esta cancelando
-                                                                          
-
+        System.out.println("Agendamento " + novo.getPxS() + "cancelado"); // antes de cancelar, usa a referencia para
+                                                                          // exibir o que esta cancelando
         novo.setPxs(null);
         novo.setStatus("D");
 
-        //if(agendas.get(numeroAgenda).getHorarios().isEmpty()) { //verifica se a agenda que teve o horario removido agora esta vazia
+        // remove a agenda da lista caso esteja sem nenhum horario agendado(para nao exibir agenda vazia)
+        int verificador = 0;
+        for (int i = 0; i < agendas.size(); i++) {
+            for (int k = 0; k < agendas.get(i).getHorarios().size(); k++) {
+                if (agendas.get(i).getHorarios().get(k).getStatus().equals("O")) {
+                    verificador++;
+                }
 
-        
+            }
+            if (verificador == 0) {
+                agendas.remove(i);
+            }
+            verificador = 0;
+        }
+        leia.close();
     }
-
 }
