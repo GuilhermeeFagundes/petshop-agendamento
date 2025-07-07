@@ -46,7 +46,7 @@ public class Main {
                     for (int i = 0; i < pets.size(); i++) {
                         System.out.println((i + 1) + "-" + pets.get(i));
                     }
-                    int petSelecionado = leia.nextInt() - 1;
+                    int petSelecionado = leia.nextInt() - 1; //adicionar validacao de indices
                     leia.nextLine(); // para nao bugar..
 
                     // Serviço
@@ -54,7 +54,7 @@ public class Main {
                     for (int i = 0; i < servicos.size(); i++) {
                         System.out.println((i + 1) + "-" + servicos.get(i));
                     }
-                    int servicoSelecionado = leia.nextInt() - 1;
+                    int servicoSelecionado = leia.nextInt() - 1; //adicionar validacao de indices
                     leia.nextLine();
 
                     // escolher a data do agendamento
@@ -99,7 +99,7 @@ public class Main {
                     break;
 
                 case 3:
-                    cancelarAgendamento();
+                    cancelarAgendamento(leia);
                     break;
 
                 case 4:
@@ -171,8 +171,8 @@ public class Main {
 
     }
 
-    static void cancelarAgendamento() {
-        Scanner leia = new Scanner(System.in);
+    static void cancelarAgendamento(Scanner leia) {
+        
         List<Horario> agendamentos = new ArrayList<>(); // para modificar o horario escolhido.
         int j = 0;
 
@@ -215,6 +215,6 @@ public class Main {
             }
             verificador = 0;
         }
-        leia.close();
+        
     }
 }
