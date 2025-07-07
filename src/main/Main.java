@@ -28,7 +28,7 @@ public class Main {
             try {
                 opcao = leia.nextInt();
             } catch (Exception erro) {
-                System.out.println("Escolha um NUMERO entre 1 e 4. ");
+                System.out.println("Escolha um numero válido");
                 leia.nextLine(); // limpa o scanner
             }
 
@@ -50,7 +50,6 @@ public class Main {
                     leia.nextLine(); // para nao bugar..
 
                     // Serviço
-
                     System.out.println("Selecione o serviço: ");
                     for (int i = 0; i < servicos.size(); i++) {
                         System.out.println((i + 1) + "-" + servicos.get(i));
@@ -59,9 +58,8 @@ public class Main {
                     leia.nextLine();
 
                     // escolher a data do agendamento
-
                     System.out.print("Data (DDMMAAAA): ");
-                    int data = leia.nextInt();
+                    int data = leia.nextInt(); //possivelmente mudar para String e fazer validação
                     leia.nextLine();
 
                     // cria ou chama uma agenda para a data escolhida
@@ -83,14 +81,13 @@ public class Main {
                     int escolha = leia.nextInt() - 1;
                     leia.nextLine();
 
-                    Horario escolhido = disponiveis.get(escolha);
+                    Horario escolhido = disponiveis.get(escolha); // referencia ao objeto Horario selecionado
 
                     // Cria o agendamento pet-servico
                     PxS pxs = new PxS(pets.get(petSelecionado), servicos.get(servicoSelecionado));
 
                     // Marcar horario como ocupado e associar aquele horario ao agendamento feito
-                    escolhido.setPxs(pxs); // escolhido e uma referencia ao objeto Horario selecionado e altera-lo afeta
-                                           // diretamente o mesmo.
+                    escolhido.setPxs(pxs); // altera o Horario selecionado
                     escolhido.setStatus("O");
 
                     System.out.println("Agendado: " + pxs);
@@ -118,9 +115,9 @@ public class Main {
 
     static Agenda verificarAgenda(int data) {
         // verificar se existe uma agenda para a data escolhida
-        for (Agenda a : agendas) { // agenda = list agendas..
+        for (Agenda a : agendas) { 
             if (a.getData() == data) {
-                return a; // retorna a agenda escolhida..
+                return a; // retorna a agenda escolhida
             }
         }
 
@@ -200,8 +197,7 @@ public class Main {
 
         Horario novo = agendamentos.get(cancelar);
 
-        System.out.println("Agendamento " + novo.getPxS() + "cancelado"); // antes de cancelar, usa a referencia para
-                                                                          // exibir o que esta cancelando
+        System.out.println("Agendamento " + novo.getPxS() + "cancelado"); // antes de cancelar, usa a referencia para exibir o que esta cancelando
         novo.setPxs(null);
         novo.setStatus("D");
 
