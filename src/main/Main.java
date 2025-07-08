@@ -1,5 +1,6 @@
 package main;
 
+import java.time.LocalDate;
 import model.*;
 import java.util.*;
 
@@ -29,7 +30,7 @@ public class Main {
                 opcao = leia.nextInt();
                 System.out.println("");
             } catch (Exception erro) {
-                System.out.println("Escolha um numero válido");
+                System.out.println("Escolha um numero válido.");
                 leia.nextLine(); // limpa o scanner
             }
 
@@ -38,35 +39,101 @@ public class Main {
                 case 1:
                     // verifica se ja tem pet e servicos cadastrados
                     if (pets.isEmpty() || servicos.isEmpty()) {
-                        System.out.println("Cadastre um pet e um serviço antes..");
+                        System.out.println("Cadastre um pet e um serviço antes.");
                         return;
                     }
 
                     // Selecionar Pet
+                    int tempPet = 0;
                     System.out.println("Selecione um Pet: ");
                     for (int i = 0; i < pets.size(); i++) {
                         System.out.println((i + 1) + "-" + pets.get(i));
+                        tempPet = i;
                     }
-                    System.out.print("Opção: ");
-                    int petSelecionado = leia.nextInt() - 1; //adicionar validacao de indices
-                    leia.nextLine(); // para nao bugar..
+
+                    int petSelecionado = 0;
+                    // valida a entrada
+                    while (true) {
+                        System.out.print("Opção: ");
+                        try {
+                            petSelecionado = leia.nextInt() - 1;
+                            leia.nextLine(); // limpar scanner
+                            if (petSelecionado >= 0 && petSelecionado <= tempPet) {
+                                break;
+                            } else {
+                                System.out.println("Digite uma opção válida.");
+                            }
+                        } catch (Exception erro) {
+                            System.out.println("Apenas numeros são válidos.");
+                            leia.nextLine();
+                        }
+                    }
                     System.out.println("");
 
                     // escolher o Serviço
+                    int tempServ = 0;
                     System.out.println("Selecione o serviço: ");
                     for (int i = 0; i < servicos.size(); i++) {
                         System.out.println((i + 1) + "-" + servicos.get(i));
+                        tempServ = i + 1;
                     }
-                    System.out.print("Opção: ");
-                    int servicoSelecionado = leia.nextInt() - 1; //adicionar validacao de indices
-                    leia.nextLine();
-                    System.out.println("");
                     
+                    int servicoSelecionado = 0;
+                    // valida a entrada
+                    while (true) {
+                        System.out.print("Opção: ");
+                        try {
+                            servicoSelecionado = leia.nextInt() - 1;
+                            leia.nextLine();
+                            if (servicoSelecionado >= 0 && servicoSelecionado < tempServ) {
+                                break;
+                            } else {
+                                System.out.println("Digite uma opção válida.");
+                            }
+                        } catch (Exception erro) {
+                            System.out.println("Apenas numeros são válidos.");
+                            leia.nextLine();
+                        }
+                    }
+                    System.out.println("");
+
                     // escolher a data do agendamento
-                    System.out.println("Escolha a data do agendamento: ");
-                    System.out.print("Data (DDMMAAAA): ");
-                    int data = leia.nextInt(); //possivelmente mudar para String e fazer validação
-                    leia.nextLine();
+                    int data = 0;
+                    String dataString = "";
+                    int dia, mes, ano;
+
+                    // valida entrada
+                    while (true) {
+                        System.out.println("Escolha a data do agendamento: ");
+                        System.out.print("Data (DDMMAAAA): ");
+                        dataString = leia.nextLine();
+
+                        if (!dataString.matches("\\d{8}")) {
+                            System.out.println("Formato inválido. Digite 8 números no formato DDMMAAAA.");
+                            continue; // volta para o inicio do while
+                        }
+
+                        // separar dia, mes e ano para validacao
+                        dia = Integer.parseInt(dataString.substring(0, 2));
+                        mes = Integer.parseInt(dataString.substring(2, 4));
+                        ano = Integer.parseInt(dataString.substring(4, 8));
+
+                        try {
+                            LocalDate dataValidar = LocalDate.of(ano, mes, dia);
+
+                            if (dataValidar.isBefore(LocalDate.now())) {
+                                System.out.println("Escolha uma data a partir de hoje.");
+                            } else {
+                                data = Integer.parseInt(dataString);
+                                break;
+                            }
+
+                        } catch (Exception erro) {
+                            System.out.println("Data inválida.");
+                            leia.nextLine();
+                        }
+
+                    }
                     System.out.println("");
 
                     // cria ou chama uma agenda para a data escolhida
@@ -78,17 +145,34 @@ public class Main {
                     // exibe horarios para serem escolhidos
                     List<Horario> disponiveis = new ArrayList<>();
                     System.out.println("Horários disponíveis:");
+                    int tempHorario = 0;
                     for (Horario h : agenda.getHorarios()) {
                         if (h.getStatus().equals("D")) { // seleciona somente horarios com status disponivel
                             disponiveis.add(h); //
                             System.out.println(disponiveis.size() + " - " + h);
+                            tempHorario++;
                         }
                     }
-                    //escolher horarios
-                    System.out.print("Opção: ");
-                    int escolha = leia.nextInt() - 1;
-                    leia.nextLine();
-                    System.out.println(""); //pula linha
+
+                    // escolher horarios
+                    int escolha;
+                    // valida a entrada
+                    while (true) {
+                        System.out.print("Opção: ");
+                        try {
+                            escolha = leia.nextInt() - 1;
+                            leia.nextLine();
+                            if (escolha >= 0 && escolha <= tempHorario - 1) {
+                                break;
+                            } else {
+                                System.out.println("Digite uma opção válida.");
+                            }
+                        } catch (Exception erro) {
+                            System.out.println("Apenas numeros são válidos.");
+                        }
+                    }
+
+                    System.out.println(""); // pula linha
 
                     Horario escolhido = disponiveis.get(escolha); // referencia ao objeto Horario selecionado
 
@@ -124,7 +208,7 @@ public class Main {
 
     static Agenda verificarAgenda(int data) {
         // verificar se existe uma agenda para a data escolhida
-        for (Agenda a : agendas) { 
+        for (Agenda a : agendas) {
             if (a.getData() == data) {
                 return a; // retorna a agenda escolhida
             }
@@ -175,16 +259,14 @@ public class Main {
                     System.out.println(h.getHoraInicio() + "-" + h.getHoraFim() + "[" + h.getStatus() + "]" + h.getPxS());
                 }
             }
-
         }
-
     }
 
     static void cancelarAgendamento(Scanner leia) {
-        
         List<Horario> agendamentos = new ArrayList<>(); // para modificar o horario escolhido.
-        int j = 0;
 
+        System.out.println("Escolha o agendamento que quer cancelar: ");
+        int j = 0;
         for (Agenda a : agendas) {
             System.out.println("Data:" + a.getData());
 
@@ -197,16 +279,30 @@ public class Main {
                     j++;
                 }
             }
-
         }
 
-        System.out.println("Escolha o agendamento que quer cancelar: ");
-        int cancelar = leia.nextInt() - 1;
-        leia.nextLine();
+        int cancelar;
+        // valida a entrada
+        while (true) {
+            System.out.print("Opção: ");
+            try {
+
+                cancelar = leia.nextInt() - 1;
+                leia.nextLine();
+                if (cancelar >= 0 && cancelar < j) {
+                    break;
+                } else {
+                    System.out.println("Digite uma opção válida");
+                }
+            } catch (Exception erro) {
+                System.out.println("Apenas numeros são válidos");
+                leia.nextLine();
+            }
+        }
 
         Horario novo = agendamentos.get(cancelar);
 
-        System.out.println("Agendamento " + novo.getPxS() + "cancelado"); // antes de cancelar, usa a referencia para exibir o que esta cancelando
+        System.out.println("Agendamento:" + novo.getPxS() + " cancelado X"); // antes de cancelar, usa a referencia para exibir o que esta cancelando
         novo.setPxs(null);
         novo.setStatus("D");
 
@@ -217,13 +313,12 @@ public class Main {
                 if (agendas.get(i).getHorarios().get(k).getStatus().equals("O")) {
                     verificador++;
                 }
-
             }
             if (verificador == 0) {
                 agendas.remove(i);
             }
             verificador = 0;
         }
-        
+
     }
 }
