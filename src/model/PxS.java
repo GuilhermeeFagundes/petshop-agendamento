@@ -19,6 +19,6 @@ public class PxS {
 
     @Override
     public String toString() {
-        return pet.getNome() + " | " + servico.getNome() + " | R$" + servico.getValor();
+        return " |Nome: " + pet.getNome() + " | Serviço: " + servico.getNome() + " | Valor: R$" + servico.getValor() + "|";
     }
 }

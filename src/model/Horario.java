@@ -42,7 +42,7 @@ public class Horario {
 
     @Override
     public String toString() {
-       return horaInicio + "-" + horaFim + "-" + status;
+       return horaInicio + "-" + horaFim + "|" + status;
     }
 }
 

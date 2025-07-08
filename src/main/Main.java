@@ -18,7 +18,7 @@ public class Main {
 
         do {
 
-            System.out.println("\n=== MENU ===");
+            System.out.println("\n======== MENU ========");
             System.out.println("1 - Agendar Serviço");
             System.out.println("2 - Listar Agendamentos");
             System.out.println("3 - Cancelar Agendamento");
@@ -27,6 +27,7 @@ public class Main {
 
             try {
                 opcao = leia.nextInt();
+                System.out.println("");
             } catch (Exception erro) {
                 System.out.println("Escolha um numero válido");
                 leia.nextLine(); // limpa o scanner
@@ -46,21 +47,27 @@ public class Main {
                     for (int i = 0; i < pets.size(); i++) {
                         System.out.println((i + 1) + "-" + pets.get(i));
                     }
+                    System.out.print("Opção: ");
                     int petSelecionado = leia.nextInt() - 1; //adicionar validacao de indices
                     leia.nextLine(); // para nao bugar..
+                    System.out.println("");
 
-                    // Serviço
+                    // escolher o Serviço
                     System.out.println("Selecione o serviço: ");
                     for (int i = 0; i < servicos.size(); i++) {
                         System.out.println((i + 1) + "-" + servicos.get(i));
                     }
+                    System.out.print("Opção: ");
                     int servicoSelecionado = leia.nextInt() - 1; //adicionar validacao de indices
                     leia.nextLine();
-
+                    System.out.println("");
+                    
                     // escolher a data do agendamento
+                    System.out.println("Escolha a data do agendamento: ");
                     System.out.print("Data (DDMMAAAA): ");
                     int data = leia.nextInt(); //possivelmente mudar para String e fazer validação
                     leia.nextLine();
+                    System.out.println("");
 
                     // cria ou chama uma agenda para a data escolhida
                     Agenda agenda = verificarAgenda(data);
@@ -77,9 +84,11 @@ public class Main {
                             System.out.println(disponiveis.size() + " - " + h);
                         }
                     }
-
+                    //escolher horarios
+                    System.out.print("Opção: ");
                     int escolha = leia.nextInt() - 1;
                     leia.nextLine();
+                    System.out.println(""); //pula linha
 
                     Horario escolhido = disponiveis.get(escolha); // referencia ao objeto Horario selecionado
 
@@ -90,7 +99,7 @@ public class Main {
                     escolhido.setPxs(pxs); // altera o Horario selecionado
                     escolhido.setStatus("O");
 
-                    System.out.println("Agendado: " + pxs);
+                    System.out.println("Agendado:" + pxs);
 
                     break;
 
@@ -163,7 +172,7 @@ public class Main {
 
             for (Horario h : a.getHorarios()) {
                 if (h.getStatus().equals("O")) { // mostra os horarios que foram selecionados
-                    System.out.println(h + "---" + h.getPxS());
+                    System.out.println(h.getHoraInicio() + "-" + h.getHoraFim() + "[" + h.getStatus() + "]" + h.getPxS());
                 }
             }
 
@@ -184,7 +193,7 @@ public class Main {
                 if (a.getHorarios().get(i).getStatus().equals("O")) {
                     agendamentos.add(a.getHorarios().get(i));
                     System.out.println(
-                            (j + 1) + " " + a.getHorarios().get(i) + " --- " + a.getHorarios().get(i).getPxS());
+                            (j + 1) + "- " + a.getHorarios().get(i).getHoraInicio() + "-" + a.getHorarios().get(i).getHoraFim() + "[" + a.getHorarios().get(i).getStatus() + "]" + a.getHorarios().get(i).getPxS());
                     j++;
                 }
             }
