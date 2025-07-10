@@ -105,7 +105,7 @@ public class Main {
                     int tempPet = 0;
                     System.out.println("Selecione um Pet: ");
                     for (int i = 0; i < pets.size(); i++) {
-                        System.out.println((i + 1) + "-" + pets.get(i));
+                        System.out.println((i + 1) + "-" + pets.get(i).getNome());
                         tempPet = i;
                     }
 
