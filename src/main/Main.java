@@ -1,8 +1,12 @@
+
 package main;
 
 import java.time.LocalDate;
 import model.*;
 import java.util.*;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter; //teste
 
 public class Main {
     static List<Agenda> agendas = new ArrayList<>();
@@ -23,7 +27,8 @@ public class Main {
             System.out.println("1 - Agendar Serviço");
             System.out.println("2 - Listar Agendamentos");
             System.out.println("3 - Cancelar Agendamento");
-            System.out.println("4 - Sair");
+            System.out.println("4 - Gravar no Arquivo de Agendamentos");
+            System.out.println("5 - Sair");
             System.out.print("Opção: ");
 
             try {
@@ -196,13 +201,17 @@ public class Main {
                     break;
 
                 case 4:
+                    gravarNoArquivo();
+                    break;
 
+                case 5:
+                    System.out.println("Programa Encerrado.");
                     break;
 
                 default:
                     System.out.println("Selecione uma opção válida. ");
             }
-        } while (opcao != 4);
+        } while (opcao != 5);
         leia.close();
     }
 
@@ -318,6 +327,41 @@ public class Main {
                 agendas.remove(i);
             }
             verificador = 0;
+        }
+
+    }
+
+    // testando, alterar depois
+    public static void gravarNoArquivo() {
+        
+        try {
+            FileWriter fw = new FileWriter("data/agendamentos.txt", false); // false = Sobrepoe arquivo anterior
+            BufferedWriter bw = new BufferedWriter(fw);
+            if (agendas.size() < 1) {
+                System.out.println("Faça pelo menos um agendamento para gravar no arquivo!");
+                bw.close();
+                return;
+            }
+            bw.write("--------------|Agendamentos|--------------");
+            bw.newLine();
+            bw.newLine();
+
+            for (Agenda a : agendas) {
+                bw.write("Data:" + a.getData());
+                bw.newLine();
+
+                for (Horario h : a.getHorarios()) {
+                    if (h.getStatus().equals("O")) {
+                        bw.write(h.getHoraInicio() + "-" + h.getHoraFim() + " -" + h.getPxS());
+                    }
+
+                }
+                bw.newLine();
+            }
+            bw.close();
+            System.out.println("Gravado no Arquivo.");
+        } catch (Exception e) {
+            System.out.println("Erro ao gravar agendamentos");
         }
 
     }
