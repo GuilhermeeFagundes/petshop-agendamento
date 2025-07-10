@@ -52,17 +52,32 @@ public class Main {
 
                         System.out.print("Peso (kg): ");
                         double peso = leia.nextDouble();
+                        if (peso > 400 || peso < 1) {
+                            throw new IllegalArgumentException(
+                                    "O peso deve ser um valor positivo válido e maior que zero.");
+                        }
 
                         System.out.print("Gênero (M/F): ");
                         char genero = leia.next().charAt(0);
+                        if (Character.toUpperCase(genero) != 'M' && Character.toUpperCase(genero) != 'F') {
+                            throw new IllegalArgumentException("O gênero deve ser 'M' (macho) ou 'F' (fêmea).");
+                        }
 
                         System.out.print("Porte (P/M/G): ");
                         char porte = leia.next().charAt(0);
                         leia.nextLine();
+                        if (Character.toUpperCase(porte) != 'P' && Character.toUpperCase(porte) != 'M'
+                                && Character.toUpperCase(porte) != 'G') {
+                            throw new IllegalArgumentException(
+                                    "O porte deve ser 'P'(pequeno), 'M'(médio) ou 'G'(grande).");
+                        }
 
                         System.out.print("Selecione a espécie: 1 - Gato | 2 - Cachorro: ");
                         int especieOpcao = leia.nextInt();
                         leia.nextLine();
+                        if (especieOpcao != 1 && especieOpcao != 2) {
+                            throw new IllegalArgumentException("Escolha uma espécie entre Gato ou Cachorro.");
+                        }
 
                         String especie = (especieOpcao == 1) ? "Gato" : "Cachorro";
                         List<Raca> racasFiltradas = new ArrayList<>();
@@ -87,9 +102,13 @@ public class Main {
 
                         System.out.println("");
                         System.out.println("Pet cadastrado com sucesso!\n" + novoPet);
+                    } catch (InputMismatchException e) { 
+                        System.out.println("Entrada inválida. Use números onde for solicitado.");
+                        leia.nextLine(); 
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Erro: " + e.getMessage() + " Tente novamente.");
                     } catch (Exception e) {
-                        System.out.println("Erro ao cadastrar pet. Verifique os dados inseridos.");
-                        leia.nextLine();
+                        System.out.println("Erro inesperado. Tente novamente.");
                     }
 
                     break;
