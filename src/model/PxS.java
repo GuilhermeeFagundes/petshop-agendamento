@@ -1,15 +1,15 @@
 package model;
 
 public class PxS {
-    Pet pet;
-    Servico servico;
+    private TipoPet pet;
+    private Servico servico;
 
-    public PxS(Pet pet, Servico servico) {
+    public PxS(TipoPet pet, Servico servico) {
         this.pet = pet;
         this.servico = servico;
     }
 
-    public Pet getpet() {
+    public TipoPet getPet() {
         return pet;
     }
 
@@ -17,8 +17,17 @@ public class PxS {
         return servico;
     }
 
+    public double calcularValorComPorte() {
+        double acrescimo = switch (pet.getPorte()) {
+            case 'M' -> 0.2;
+            case 'G' -> 0.4;
+            default -> 0.0;
+        };
+        return servico.getValor() * (1 + acrescimo);
+    }
+
     @Override
     public String toString() {
-        return " |Nome: " + pet.getNome() + " | Serviço: " + servico.getNome() + " | Valor: R$" + servico.getValor() + "|";
+        return "Pet: " + pet.getNome() + " | Serviço: " + servico.getNome() + " | Valor Final: R$" + String.format("%.2f", calcularValorComPorte());
     }
 }

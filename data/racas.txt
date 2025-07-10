@@ -1,0 +1,20 @@
+Gato:Persa
+Gato:Siamês
+Gato:Maine Coon
+Gato:Bengal
+Gato:Sphynx
+Gato:Angorá
+Gato:Azul Russo
+Gato:Savannah
+Gato:Himalaio
+Gato:British Shorthair
+Cachorro:Poodle
+Cachorro:Labrador
+Cachorro:Golden Retriever
+Cachorro:Bulldog
+Cachorro:Beagle
+Cachorro:Yorkshire
+Cachorro:Chihuahua
+Cachorro:Husky Siberiano
+Cachorro:Doberman
+Cachorro:Pastor Alemão

@@ -4,18 +4,18 @@ package main;
 import java.time.LocalDate;
 import model.*;
 import java.util.*;
-
+import util.RacaLoader;
 import java.io.BufferedWriter;
 import java.io.FileWriter; //teste
 
 public class Main {
     static List<Agenda> agendas = new ArrayList<>();
-    static List<Pet> pets = new ArrayList<>();
+    static List<TipoPet> pets = new ArrayList<>();
     static List<Servico> servicos = new ArrayList<>();
+    static List<Raca> racas = RacaLoader.carregarRacas("data/racas.txt"); // Carrega raças a partir de arquivo externo
 
     public static void main(String[] args) {
-        pets.add(new Pet("bolinha")); // para teste
-        pets.add(new Pet("trovao"));
+        
         servicos.add(new Servico("banho", 100.0)); // servicos padrao
         servicos.add(new Servico("tosa", 200.0));
         Scanner leia = new Scanner(System.in);
@@ -24,15 +24,17 @@ public class Main {
         do {
 
             System.out.println("\n======== MENU ========");
-            System.out.println("1 - Agendar Serviço");
-            System.out.println("2 - Listar Agendamentos");
-            System.out.println("3 - Cancelar Agendamento");
-            System.out.println("4 - Gravar no Arquivo de Agendamentos");
-            System.out.println("5 - Sair");
+            System.out.println("1 - Cadastrar Pet");
+            System.out.println("2 - Agendar Serviço");
+            System.out.println("3 - Listar Agendamentos");
+            System.out.println("4 - Cancelar Agendamento");
+            System.out.println("5 - Gravar no Arquivo de Agendamentos");
+            System.out.println("6 - Sair");
             System.out.print("Opção: ");
 
             try {
                 opcao = leia.nextInt();
+                leia.nextLine();
                 System.out.println("");
             } catch (Exception erro) {
                 System.out.println("Escolha um numero válido.");
@@ -40,10 +42,61 @@ public class Main {
             }
 
             switch (opcao) {
-
                 case 1:
+                    try {
+                        System.out.print("Nome do pet: ");
+                        String nome = leia.nextLine();
+
+                        System.out.print("Data de nascimento (dd/MM/yyyy): ");
+                        String data = leia.nextLine();
+
+                        System.out.print("Peso (kg): ");
+                        double peso = leia.nextDouble();
+
+                        System.out.print("Gênero (M/F): ");
+                        char genero = leia.next().charAt(0);
+
+                        System.out.print("Porte (P/M/G): ");
+                        char porte = leia.next().charAt(0);
+                        leia.nextLine();
+
+                        System.out.print("Selecione a espécie: 1 - Gato | 2 - Cachorro: ");
+                        int especieOpcao = leia.nextInt();
+                        leia.nextLine();
+
+                        String especie = (especieOpcao == 1) ? "Gato" : "Cachorro";
+                        List<Raca> racasFiltradas = new ArrayList<>();
+
+                        for (Raca r : racas) {
+                            if (r.getEspecie().equalsIgnoreCase(especie)) {
+                                racasFiltradas.add(r);
+                            }
+                        }
+
+                        for (int i = 0; i < racasFiltradas.size(); i++) {
+                            System.out.println((i + 1) + " - " + racasFiltradas.get(i).getNome());
+                        }
+
+                        System.out.print("Escolha a raça: ");
+                        int escolhaRaca = leia.nextInt();
+                        leia.nextLine();
+                        Raca racaEscolhida = racasFiltradas.get(escolhaRaca - 1);
+
+                        TipoPet novoPet = new TipoPet(nome, data, peso, genero, porte, racaEscolhida);
+                        pets.add(novoPet);
+
+                        System.out.println("");
+                        System.out.println("Pet cadastrado com sucesso!\n" + novoPet);
+                    } catch (Exception e) {
+                        System.out.println("Erro ao cadastrar pet. Verifique os dados inseridos.");
+                        leia.nextLine();
+                    }
+
+                    break;
+
+                case 2:
                     // verifica se ja tem pet e servicos cadastrados
-                    if (pets.isEmpty() || servicos.isEmpty()) {
+                    if (pets.isEmpty()) {
                         System.out.println("Cadastre um pet e um serviço antes.");
                         return;
                     }
@@ -192,26 +245,26 @@ public class Main {
 
                     break;
 
-                case 2:
+                case 3:
                     mostrarAgendamentos();
                     break;
 
-                case 3:
+                case 4:
                     cancelarAgendamento(leia);
                     break;
 
-                case 4:
+                case 5:
                     gravarNoArquivo();
                     break;
 
-                case 5:
+                case 6:
                     System.out.println("Programa Encerrado.");
                     break;
 
                 default:
                     System.out.println("Selecione uma opção válida. ");
             }
-        } while (opcao != 5);
+        } while (opcao != 6);
         leia.close();
     }
 
