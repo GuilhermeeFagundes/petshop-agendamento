@@ -28,6 +28,6 @@ public class PxS {
 
     @Override
     public String toString() {
-        return "Pet: " + pet.getNome() + " | Serviço: " + servico.getNome() + " | Valor Final: R$" + String.format("%.2f", calcularValorComPorte());
-    }
+        return " |Pet: " + pet.getNome() + " | Serviço: " + servico.getNome() + " | Valor Final: R$" + String.format("%.2f", calcularValorComPorte());
+    } 
 }
