@@ -71,45 +71,38 @@ public class AgendaService {
         }
     }
 
-    public void mostrarAgendamentos() {
-        System.out.println("\n====== Agendas ======");
-
+    public List<String> mostrarAgendamentos() {
+        //movido para o controller System.out.println("\n====== Agendas ======");
+        List<String> mostrarAgendamentos = new ArrayList<>();
         for (Agenda a : agendas) {
-            System.out.println("Data:" + a.getData());
+           mostrarAgendamentos.add("Data:" + a.getData()); //System.out.println("Data:" + a.getData());
 
             for (Horario h : a.getHorarios()) {
                 if (h.getStatus().equals("O")) { // mostra os horarios que foram selecionados
-                    System.out.println(h.getHoraInicio() + "-" + h.getHoraFim() + "[" + h.getStatus() + "]" + h.getPxS());
+                     mostrarAgendamentos.add(h.getHoraInicio() + "-" + h.getHoraFim() + "[" + h.getStatus() + "]" + h.getPxS());
                 }
             }
         }
+        return mostrarAgendamentos;
     }
 
-    public List<Horario> exibirAgendamentosOcupados() {
-        if (agendas.size() < 1) {
-            return null;
-        }
-        List<Horario> agendamentos = new ArrayList<>(); // para modificar o horario escolhido.
-
-        System.out.println("Escolha o agendamento que quer cancelar: ");
+    public void exibirAgendamentosOcupados(List<Horario> agendamentos, List<String> exibirAgendados) {
+     
         int j = 0;
-
         for (Agenda a : agendas) {
-            System.out.println("Data:" + a.getData());
+            exibirAgendados.add("Data:" + a.getData());
 
             for (int i = 0; i < a.getHorarios().size(); i++) {
 
                 if (a.getHorarios().get(i).getStatus().equals("O")) {
                     agendamentos.add(a.getHorarios().get(i));
-                    System.out.println((j + 1) + "- " + a.getHorarios().get(i).getHoraInicio() + "-"
-                            + a.getHorarios().get(i).getHoraFim() + "[" + a.getHorarios().get(i).getStatus() + "]"
-                            + a.getHorarios().get(i).getPxS());
+                    exibirAgendados.add((j + 1) + "- " + a.getHorarios().get(i).getHoraInicio() + "-" + a.getHorarios().get(i).getHoraFim() + "[" + a.getHorarios().get(i).getStatus() + "]" + a.getHorarios().get(i).getPxS());
 
                     j++;
+
                 }
             }
-        }
-        return agendamentos;
+        } 
     }
 
     public void cancelarAgendamento(Horario novo) {
@@ -117,8 +110,7 @@ public class AgendaService {
         novo.setPxs(null);
         novo.setStatus("D");
 
-        // remove a agenda da lista caso esteja sem nenhum horario agendado(para nao
-        // exibir agenda vazia)
+        // remove a agenda da lista caso esteja sem nenhum horario agendado(para nao exibir agenda vazia)
         int verificador = 0;
         for (int i = 0; i < agendas.size(); i++) {
             for (int k = 0; k < agendas.get(i).getHorarios().size(); k++) {
@@ -135,15 +127,14 @@ public class AgendaService {
     }
 
     // testando, alterar depois
-    public void gravarNoArquivo() {
+    public boolean gravarNoArquivo() {
 
         try {
             FileWriter fw = new FileWriter("data/agendamentos.txt", false); // false = Sobrepoe arquivo anterior
             BufferedWriter bw = new BufferedWriter(fw);
             if (agendas.size() < 1) {
-                System.out.println("Faça pelo menos um agendamento para gravar no arquivo!");
                 bw.close();
-                return;
+                return false;
             }
             bw.write("--------------|Agendamentos|--------------");
             bw.newLine();
@@ -162,9 +153,9 @@ public class AgendaService {
                 bw.newLine();
             }
             bw.close();
-            System.out.println("Gravado no Arquivo.");
+            return true;
         } catch (Exception e) {
-            System.out.println("Erro ao gravar agendamentos");
+            return false;
         }
     }
 }

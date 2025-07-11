@@ -74,6 +74,13 @@ public class MainRefactor {
                 case 5:
                     agendaController.gravarAgendamentos();
                     break;
+
+                 case 6:
+                    System.out.println("Finalizando..");
+                    break;
+
+                default:
+                    System.out.println("Opção Inválida.");
             }
 
         } while (opcao != 6);

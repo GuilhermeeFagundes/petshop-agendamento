@@ -19,6 +19,6 @@ public class Servico {
 
     @Override
     public String toString() {
-        return nome + " | " + valor;
+        return nome + " | Valor base: " + valor;
     }
 }

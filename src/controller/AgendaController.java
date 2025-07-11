@@ -24,7 +24,7 @@ public class AgendaController {
     public void agendarServico() {
         // verifica se ja tem pet e servicos cadastrados
         if (pets.isEmpty()) {
-            System.out.println("Cadastre um pet e um serviço antes.");
+            System.out.println("Cadastre um pet antes de agendar");
             return;
         }
 
@@ -169,15 +169,35 @@ public class AgendaController {
     }
 
     public void mostrarAgendamentos() {
-        agendaService.mostrarAgendamentos();
+        //armazena valores separados no Service
+        List<String> agendamentos = agendaService.mostrarAgendamentos();
+        if(agendamentos.isEmpty()) {
+            System.out.print("Faça pelo menos um agendamento antes de listar os agendamentos.");
+            return;
+        }
+        //Exibe no console
+        System.out.println("\n====== Agendas ======");
+        for (String linha : agendamentos) {
+            System.out.println(linha);
+        }
+
     }
 
     public void cancelarAgendamento() {
-        List<Horario> agendados = agendaService.exibirAgendamentosOcupados();
 
-        if (agendados == null) {
-            System.out.println("Faça pelo menos um agendamento para cancelar.");
+        List<Horario> agendados = new ArrayList<>();
+        List<String> exibirAgendados = new ArrayList<>();
+
+        agendaService.exibirAgendamentosOcupados(agendados, exibirAgendados);
+
+        if (agendados.isEmpty()) {
+            System.out.println("Faça pelo menos um agendamento antes de cancelar.");
             return;
+        }
+
+        System.out.println("Escolha o agendamento que quer cancelar:");
+        for (String d : exibirAgendados) {
+            System.out.println(d);
         }
 
         int cancelar;
@@ -200,12 +220,17 @@ public class AgendaController {
         }
         Horario novo = agendados.get(cancelar);
         
-        System.out.println("Agendamento:" + novo.getPxS() + " cancelado X"); // antes de cancelar, usa a referencia para exibir o que esta cancelando
+        System.out.println("Agendamento:" + novo.getPxS() + " [X]cancelado"); // antes de cancelar, usa a referencia para exibir o que esta cancelando
                                                                              
         agendaService.cancelarAgendamento(novo);
     }
 
     public void gravarAgendamentos() {
         agendaService.gravarNoArquivo();
+        if (!agendaService.gravarNoArquivo()) {
+            System.out.println("Erro ao gravar agendamentos ou nenhum agendamento disponível.");
+        } else {
+            System.out.println("Gravado no Arquivo.");
+        }
     }
 }
