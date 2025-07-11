@@ -52,7 +52,7 @@ public class Main {
 
                         System.out.print("Peso (kg): ");
                         double peso = leia.nextDouble();
-                        if (peso > 400 || peso < 1) {
+                        if (peso > 350 || peso < 1) {
                             throw new IllegalArgumentException(
                                     "O peso deve ser um valor positivo válido e maior que zero.");
                         }
