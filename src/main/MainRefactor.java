@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import controller.AgendaController;
+import controller.MenuController;
 import controller.PetController;
 import service.AgendaService;
 import service.PetService;
@@ -23,7 +24,8 @@ public class MainRefactor {
         List<Servico> servicos = new ArrayList<>();
         List<Raca> racas = RacaLoader.carregarRacas("data/racas.txt"); // Carrega raças a partir de arquivo externo
 
-        servicos.add(new Servico("banho", 100.0)); // servicos padrao
+        // serviços padrão
+        servicos.add(new Servico("banho", 100.0)); 
         servicos.add(new Servico("tosa", 200.0));
 
         PetService petService = new PetService(pets);
@@ -32,58 +34,8 @@ public class MainRefactor {
         AgendaService agendaService = new AgendaService(agendas, pets, servicos);
         AgendaController agendaController = new AgendaController(pets, leia, servicos, agendaService);
 
-        int opcao = 0;
+        MenuController menuController = new MenuController(leia, petController, agendaController);
 
-        do {
-
-            System.out.println("\n======== MENU ========");
-            System.out.println("1 - Cadastrar Pet");
-            System.out.println("2 - Agendar Serviço");
-            System.out.println("3 - Listar Agendamentos");
-            System.out.println("4 - Cancelar Agendamento");
-            System.out.println("5 - Gravar no Arquivo de Agendamentos");
-            System.out.println("6 - Sair");
-            System.out.print("Opção: ");
-
-            try {
-                opcao = leia.nextInt();
-                leia.nextLine();
-                System.out.println("");
-            } catch (Exception erro) {
-                System.out.println("Escolha um numero válido.");
-                leia.nextLine(); // limpa o scanner
-            }
-
-            switch (opcao) {
-                case 1:
-                    petController.cadastrarPet();
-                    break;
-
-                case 2:
-                    agendaController.agendarServico();
-                    break;
-
-                case 3:
-                    agendaController.mostrarAgendamentos();
-                    break;
-
-                case 4:
-                    agendaController.cancelarAgendamento();
-                    break;
-
-                case 5:
-                    agendaController.gravarAgendamentos();
-                    break;
-
-                 case 6:
-                    System.out.println("Finalizando..");
-                    break;
-
-                default:
-                    System.out.println("Opção Inválida.");
-            }
-
-        } while (opcao != 6);
-
+        menuController.exibirMenu(); //Exibe o MENU
     }
 }
