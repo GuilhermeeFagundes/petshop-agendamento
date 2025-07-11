@@ -21,7 +21,14 @@ public class Pet {
 
     public void setDataNascimento(String dataStr) {
         try {
-            this.dataNascimento = LocalDate.parse(dataStr, formatoBR);
+            LocalDate dataConvertida = LocalDate.parse(dataStr, formatoBR);
+          
+            //valida datas futuras
+            if (dataConvertida.isAfter(LocalDate.now())) {
+                 System.out.println("A data de nascimento não pode ser no futuro.");
+                return;
+            }
+              this.dataNascimento = dataConvertida;
         } catch (DateTimeParseException e) {
             System.out.println("Data de nascimento inválida. Use o formato dd/MM/yyyy.");
         }
